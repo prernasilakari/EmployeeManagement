@@ -40,7 +40,7 @@ public class EmployeeManagementController {
      * @return
      */
     @GetMapping("getById/{id}")
-    public EmployeeManagementVO getEmpById(@PathVariable int id) {
+    public EmployeeManagementVO getEmpById(@PathVariable int id) throws Exception {
         return employeeManagementService.getById(id);
     }
 }

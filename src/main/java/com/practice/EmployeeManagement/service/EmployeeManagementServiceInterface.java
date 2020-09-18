@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface EmployeeManagementServiceInterface {
 
-    public List<EmployeeManagementVO> getAllEmp();
+    List<EmployeeManagementVO> getAllEmp();
 
-    public void createEmp(EmployeeManagementVO employeeManagementVO);
+    void createEmp(EmployeeManagementVO employeeManagementVO);
 
-    public EmployeeManagementVO getById(int id);
+    EmployeeManagementVO getById(int id) throws Exception;
 
 }

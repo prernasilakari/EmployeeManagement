@@ -16,6 +16,7 @@ import javax.persistence.*;
 @Table(name = "address")
 public class AddressModel {
     @Id
+    @GeneratedValue
     @Column(name = "address_id")
     private int addressId;
     @Column(name = "house_number")

@@ -8,14 +8,14 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * This is the model class of employee having employeeId , employeeName and employeeAge as attributes.
- * It also has oneToMany maping with address and OneToOne mapping with passport.
+ *This is the model class of employee having employeeId , employeeName and employeeAge as attributes.
+ *It also has oneToMany maping with address and OneToOne mapping with passport.
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "employee")
+@Table(name = "employee_table")
 public class EmployeeManagementModel {
     @Id
     @GeneratedValue

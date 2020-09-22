@@ -8,8 +8,13 @@ public interface EmployeeManagementService {
 
     List<EmployeeManagementVO> getAllEmp();
 
-    void createEmp(EmployeeManagementVO employeeManagementVO);
+    EmployeeManagementVO createEmp(EmployeeManagementVO employeeManagementVO);
 
     EmployeeManagementVO getById(int id) throws Exception;
 
+    EmployeeManagementVO getByName(String name) throws Exception;
+
+    void deleteByEmployeeId(int id) throws Exception;
+
+    EmployeeManagementVO updateEmpbyId(EmployeeManagementVO employeeManagementVO, int id) throws Exception;
 }

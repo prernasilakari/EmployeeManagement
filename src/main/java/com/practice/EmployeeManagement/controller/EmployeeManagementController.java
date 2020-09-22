@@ -1,9 +1,12 @@
 package com.practice.EmployeeManagement.controller;
 
 import com.practice.EmployeeManagement.VO.EmployeeManagementVO;
+import com.practice.EmployeeManagement.execption.EmployeeNotFound;
 import com.practice.EmployeeManagement.service.EmployeeManagementServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +23,9 @@ public class EmployeeManagementController {
      * @return
      */
     @GetMapping("/getAll")
-    public List<EmployeeManagementVO> getAllEmployee() {
-        return employeeManagementService.getAllEmp();
+    public ResponseEntity<List<EmployeeManagementVO>> getAllEmployee() {
+        List<EmployeeManagementVO> employeeManagementVOS = employeeManagementService.getAllEmp();
+        return new ResponseEntity<>(employeeManagementVOS, HttpStatus.OK);
     }
 
     /**
@@ -30,8 +34,9 @@ public class EmployeeManagementController {
      * @param employeeManagementVO
      */
     @PostMapping("/addEmp")
-    public void addEmp(@RequestBody EmployeeManagementVO employeeManagementVO) {
+    public ResponseEntity<EmployeeManagementVO> addEmp(@RequestBody EmployeeManagementVO employeeManagementVO) {
         employeeManagementService.createEmp(employeeManagementVO);
+        return new ResponseEntity<>(employeeManagementVO, HttpStatus.CREATED);
     }
 
     /**
@@ -41,8 +46,9 @@ public class EmployeeManagementController {
      * @return
      */
     @GetMapping("getById/{id}")
-    public EmployeeManagementVO getEmpById(@PathVariable int id) throws Exception {
-        return employeeManagementService.getById(id);
+    public ResponseEntity<EmployeeManagementVO> getEmpById(@PathVariable int id) throws EmployeeNotFound {
+        EmployeeManagementVO employeeManagementVO = employeeManagementService.getById(id);
+        return new ResponseEntity<>(employeeManagementVO, HttpStatus.OK);
     }
 
     /**
@@ -53,8 +59,9 @@ public class EmployeeManagementController {
      * @throws Exception
      */
     @GetMapping("getByName/{name}")
-    public EmployeeManagementVO getEmpByName(@PathVariable String name) throws Exception {
-        return employeeManagementService.getByName(name);
+    public ResponseEntity<EmployeeManagementVO> getEmpByName(@PathVariable String name) throws EmployeeNotFound {
+        EmployeeManagementVO employeeManagementVO = employeeManagementService.getByName(name);
+        return new ResponseEntity<>(employeeManagementVO, HttpStatus.OK);
     }
 
     /**
@@ -64,8 +71,9 @@ public class EmployeeManagementController {
      * @throws Exception
      */
     @DeleteMapping("deleteById/{id}")
-    public void deleteEmpById(@PathVariable int id) throws Exception {
-        employeeManagementService.deleteById(id);
+    public ResponseEntity<Void> deleteEmpById(@PathVariable int id) throws EmployeeNotFound {
+        employeeManagementService.deleteByEmployeeId(id);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -74,8 +82,9 @@ public class EmployeeManagementController {
      * @param employeeManagementVO
      */
     @PutMapping("/updateEmp/{id}")
-    public void updateEmpById(@RequestBody EmployeeManagementVO employeeManagementVO, @PathVariable int id) throws Exception {
-        employeeManagementService.updateEmpbyId(employeeManagementVO, id);
+    public ResponseEntity<EmployeeManagementVO> updateEmpById(@RequestBody EmployeeManagementVO employeeManagementVO, @PathVariable int id) throws EmployeeNotFound {
+        EmployeeManagementVO employeeManagementVO1 = employeeManagementService.updateEmpbyId(employeeManagementVO, id);
+        return new ResponseEntity<>(employeeManagementVO1, HttpStatus.OK);
 
     }
 }

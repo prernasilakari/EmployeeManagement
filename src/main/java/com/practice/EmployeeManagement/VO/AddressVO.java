@@ -11,4 +11,12 @@ import lombok.NoArgsConstructor;
 public class AddressVO {
     private int addressId;
     private String city;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "addressId=" + addressId +
+                ", city='" + city + '\'' +
+                '}';
+    }
 }

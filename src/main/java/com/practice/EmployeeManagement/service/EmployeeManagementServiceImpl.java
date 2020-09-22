@@ -1,5 +1,6 @@
 package com.practice.EmployeeManagement.service;
 
+
 import com.practice.EmployeeManagement.VO.EmployeeManagementVO;
 import com.practice.EmployeeManagement.execption.EmployeeNotFound;
 import com.practice.EmployeeManagement.model.AddressModel;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Slf4j
 @Service
 public class EmployeeManagementServiceImpl implements EmployeeManagementService {
@@ -26,8 +26,8 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
     private AddressRepository addressRepository;
     @Autowired
     private PassportRepository passportRepository;
-
-    DozerBeanMapper mapper = new DozerBeanMapper();
+    @Autowired
+    private DozerBeanMapper mapper;
 
     /**
      * This method is used to get the details of all the employee
@@ -37,8 +37,14 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
     @Override
     public List<EmployeeManagementVO> getAllEmp() {
         List<EmployeeManagementModel> employeeManagementModels = employeeManagementRepository.findAll();
-        List<EmployeeManagementVO> employeeManagementVOS = mapper.map(employeeManagementModels, List.class);
+        //   List<EmployeeManagementVO> employeeManagementVOS = mapper.map(employeeManagementModels, ArrayList.class);
+        List<EmployeeManagementVO> employeeManagementVOS = new ArrayList<>();
+        employeeManagementModels.stream().forEach(employeeManagementModel -> {
+            EmployeeManagementVO employeeManagementVO = mapper.map(employeeManagementModel, EmployeeManagementVO.class);
+            employeeManagementVOS.add(employeeManagementVO);
+        });
         log.debug("model{}", employeeManagementModels);
+        log.debug("vo{}", employeeManagementVOS);
         return employeeManagementVOS;
     }
 
@@ -46,8 +52,9 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
      * This method is used to create a employee
      *
      * @param employeeManagementVO
+     * @return result
      */
-    public void createEmp(EmployeeManagementVO employeeManagementVO) {
+    public EmployeeManagementVO createEmp(EmployeeManagementVO employeeManagementVO) {
         List<AddressModel> addressModels = new ArrayList<>();
         employeeManagementVO.getAddressList().stream().forEach(addressVO ->
                 {
@@ -62,6 +69,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
         employeeManagementModel.setAddressList(addressModels);
         employeeManagementModel.setPassport(passportModel);
         employeeManagementRepository.save(employeeManagementModel);
+        return employeeManagementVO;
     }
 
     /**
@@ -70,7 +78,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
      * @param id
      * @return
      */
-    public EmployeeManagementVO getById(int id) throws Exception {
+    public EmployeeManagementVO getById(int id) throws EmployeeNotFound {
         EmployeeManagementModel employeeManagementModel = employeeManagementRepository.findByEmployeeId(id);
         if (employeeManagementModel == null) {
             throw new EmployeeNotFound(id);
@@ -87,7 +95,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
      * @return
      * @throws EmployeeNotFound
      */
-    public EmployeeManagementVO getByName(String name) throws Exception {
+    public EmployeeManagementVO getByName(String name) throws EmployeeNotFound {
         EmployeeManagementModel employeeManagementModel = employeeManagementRepository.findByEmployeeName(name);
         if (employeeManagementModel == null) {
             throw new EmployeeNotFound(name);
@@ -103,7 +111,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
      * @param id
      * @throws Exception
      */
-    public void deleteById(int id) throws Exception {
+    public void deleteByEmployeeId(int id) throws EmployeeNotFound {
         EmployeeManagementModel employeeManagementModel = employeeManagementRepository.findByEmployeeId(id);
         if (employeeManagementModel == null) {
             throw new EmployeeNotFound(id);
@@ -116,7 +124,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
      *
      * @param employeeManagementVO
      */
-    public void updateEmpbyId(EmployeeManagementVO employeeManagementVO, int id) throws Exception {
+    public EmployeeManagementVO updateEmpbyId(EmployeeManagementVO employeeManagementVO, int id) throws EmployeeNotFound {
         EmployeeManagementModel employeeManagement = employeeManagementRepository.findByEmployeeId(id);
         if (employeeManagement == null) {
             throw new EmployeeNotFound(id);
@@ -136,5 +144,6 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
             employeeManagementModel.setPassport(passportModel);
             employeeManagementRepository.save(employeeManagementModel);
         }
+        return employeeManagementVO;
     }
 }
